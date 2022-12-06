@@ -1,9 +1,9 @@
 import * as S from './Auth.style';
-const SubmitButton = ({ title, disabled = false }) => {
+const SubmitButton = ({ onClick, title, disabled = false }) => {
   return (
-    <S.SelectButtonContainer disabled={disabled}>
+    <S.SubmitButtonContainer onClick={onClick} disabled={disabled}>
       {title}
-    </S.SelectButtonContainer>
+    </S.SubmitButtonContainer>
   );
 };
 

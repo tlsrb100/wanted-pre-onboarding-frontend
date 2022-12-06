@@ -7,12 +7,13 @@ import {
   checkValidationEmail,
   checkValidationPassword,
 } from '../../utils/auth';
+import { signIn } from '../../apis/auth';
 const InputForm = () => {
   const [userLoginInfo, setUserLoginInfo] = useState({});
   const [validations, setValidations] = useState({});
-  const [selectedButton, setSelectedButton] = useState('');
+  const [selectedButton, setSelectedButton] = useState('로그인');
   const buttonList = ['로그인', '회원가입'];
-
+  console.log(userLoginInfo);
   const buttonClickHandler = (e) => {
     setSelectedButton(e.target.value);
   };
@@ -27,6 +28,10 @@ const InputForm = () => {
     setUserLoginInfo({ ...userLoginInfo, password: e.target.value });
     const passwordValidation = checkValidationPassword(e.target.value);
     setValidations({ ...validations, passwordValidation });
+  };
+
+  const submitLoginInfoHandler = (body) => {
+    signIn(body);
   };
 
   return (
@@ -49,6 +54,7 @@ const InputForm = () => {
       })}
 
       <SubmitButton
+        onClick={() => submitLoginInfoHandler(userLoginInfo)}
         title='제출'
         disabled={
           !(validations.emailValidation && validations.passwordValidation)

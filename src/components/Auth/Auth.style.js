@@ -17,6 +17,12 @@ const SelectButtonContainer = styled.button`
   padding: 5px;
   color: white;
 `;
+const SubmitButtonContainer = styled.button`
+  /* background-color: ${({ isSelected }) =>
+    isSelected ? 'rgb(70,124,237)' : 'rgb(172,195,238)'};
+  padding: 5px;
+  color: white; */
+`;
 
 export {
   AuthContainer,
@@ -24,4 +30,5 @@ export {
   InputBoxContainer,
   InputFormWrapper,
   SelectButtonContainer,
+  SubmitButtonContainer,
 };
