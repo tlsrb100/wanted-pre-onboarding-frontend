@@ -9,7 +9,7 @@ const TodoCardList = ({ todoList }) => {
         return (
           <TodoCard
             key={todo.id}
-            order={todo.id}
+            id={todo.id}
             content={todo.todo}
             isCompleted={todo.isCompleted}
           />
