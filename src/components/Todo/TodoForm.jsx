@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getTodos } from '../../apis/todo';
 import InputTodo from './InputTodo';
 import TodoCardList from './TodoCardList';
-
+import * as S from './Todo.style';
 const TodoForm = () => {
   const [todoList, setTodoList] = useState([]);
   const asyncGetTodos = async () => {
@@ -16,10 +16,10 @@ const TodoForm = () => {
   }, []);
 
   return (
-    <>
-      <TodoCardList todoList={todoList} refetchFunc={asyncGetTodos} />
+    <S.TodoFormContainer>
       <InputTodo onClick={asyncGetTodos} />
-    </>
+      <TodoCardList todoList={todoList} refetchFunc={asyncGetTodos} />
+    </S.TodoFormContainer>
   );
 };
 

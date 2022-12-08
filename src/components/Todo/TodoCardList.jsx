@@ -4,19 +4,20 @@ import TodoCard from './TodoCard';
 const TodoCardList = ({ todoList, refetchFunc }) => {
   console.log('props로 받은 todoList', todoList);
   return (
-    <>
+    <S.TodoCardListContainer>
       {todoList?.map((todo, idx) => {
         return (
-          <TodoCard
-            key={todo.id}
-            id={todo.id}
-            content={todo.todo}
-            isCompleted={todo.isCompleted}
-            refetchFunc={refetchFunc}
-          />
+          <li key={todo.id}>
+            <TodoCard
+              id={todo.id}
+              content={todo.todo}
+              isCompleted={todo.isCompleted}
+              refetchFunc={refetchFunc}
+            />
+          </li>
         );
       })}
-    </>
+    </S.TodoCardListContainer>
   );
 };
 

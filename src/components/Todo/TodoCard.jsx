@@ -11,6 +11,7 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
   const toggleCheckHandler = () => {
     setIsChecked((pre) => !pre);
   };
+
   const changeEditHandler = () => {
     setIsSelectedEditButton((pre) => !pre);
   };
@@ -23,6 +24,7 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
       console.log('Error', error.message);
     }
   };
+
   const updateHandler = async (id) => {
     try {
       const body = { todo: inputContent.current.value, isCompleted: isChecked };
@@ -37,7 +39,7 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
 
   useEffect(() => {
     inputContent.current.value = content;
-  }, []);
+  }, [content]);
 
   return (
     <S.TodoCardContainer>
