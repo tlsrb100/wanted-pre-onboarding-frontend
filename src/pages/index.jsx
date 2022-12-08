@@ -1,9 +1,26 @@
+import PrivateRouter from '../components/@helper/router/PrivateRouter';
 import Auth from './Auth/index';
+import PublicRouter from '../components/@helper/router/PublicRouter';
+import Todo from './Todo/index';
 
 const Pages = [
   {
-    path: '/',
-    element: <Auth />,
+    element: <PrivateRouter />,
+    children: [
+      {
+        path: '/todo',
+        element: <Todo />,
+      },
+    ],
+  },
+  {
+    element: <PublicRouter />,
+    children: [
+      {
+        path: '/',
+        element: <Auth />,
+      },
+    ],
   },
 ];
 

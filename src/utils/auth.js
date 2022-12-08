@@ -1,3 +1,5 @@
+import { apiClient } from '../apis/auth';
+
 const checkValidationEmail = (email) => {
   const isValid = email?.includes('@');
   return isValid;
@@ -9,4 +11,15 @@ const checkValidationPassword = (password) => {
   return isValid;
 };
 
-export { checkValidationEmail, checkValidationPassword };
+const setHeaderToken = () => {
+  const accessToken = localStorage.getItem('accessToken');
+  if (accessToken) {
+    apiClient.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${accessToken}`;
+  } else {
+    delete apiClient.defaults.headers.common['Authorization'];
+  }
+};
+
+export { checkValidationEmail, checkValidationPassword, setHeaderToken };

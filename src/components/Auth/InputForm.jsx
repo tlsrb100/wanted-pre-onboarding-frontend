@@ -7,13 +7,16 @@ import {
   checkValidationEmail,
   checkValidationPassword,
 } from '../../utils/auth';
-import { signIn } from '../../apis/auth';
+import { signIn, signUp } from '../../apis/auth';
+import { useNavigate } from 'react-router-dom';
 const InputForm = () => {
   const [userLoginInfo, setUserLoginInfo] = useState({});
   const [validations, setValidations] = useState({});
   const [selectedButton, setSelectedButton] = useState('로그인');
+  const navigate = useNavigate();
   const buttonList = ['로그인', '회원가입'];
-  console.log(userLoginInfo);
+  console.log(selectedButton);
+
   const buttonClickHandler = (e) => {
     setSelectedButton(e.target.value);
   };
@@ -30,8 +33,20 @@ const InputForm = () => {
     setValidations({ ...validations, passwordValidation });
   };
 
-  const submitLoginInfoHandler = (body) => {
-    signIn(body);
+  const submitLoginInfoHandler = async (body) => {
+    console.log('body는', body);
+    if (selectedButton === '로그인') {
+      const res = await signIn(body);
+      const accessToken = res.data.access_token;
+      localStorage.setItem('accessToken', accessToken);
+      navigate('/todo');
+      console.log('로그인응답은', res);
+    } else if (selectedButton === '회원가입') {
+      const res = await signUp(body);
+      const accessToken = res.data.access_token;
+      localStorage.setItem('accessToken', accessToken);
+      console.log('회원가입응답은', res);
+    }
   };
 
   return (

@@ -6,12 +6,12 @@ const apiClient = axios.create({
 
 const signUp = async (body) => {
   const res = await apiClient.post('/auth/signup', body);
-  console.log(res);
+  return res;
 };
 
 const signIn = async (body) => {
   const res = await apiClient.post('/auth/signIn', body);
-  console.log(res);
+  return res;
 };
 
-export { signIn, signUp };
+export { apiClient, signIn, signUp };
