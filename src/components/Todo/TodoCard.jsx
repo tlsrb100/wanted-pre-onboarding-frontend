@@ -15,12 +15,24 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
     setIsSelectedEditButton((pre) => !pre);
   };
 
-  const updateHandler = async () => {
-    console.log(inputContent.current.value);
-    const body = { todo: inputContent.current.value, isCompleted: isChecked };
-    const res = await updateTodo(body, id);
-    setIsSelectedEditButton((pre) => !pre);
-    refetchFunc();
+  const deleteHandler = async (id) => {
+    try {
+      const res = await deleteTodo(id);
+      refetchFunc();
+    } catch (error) {
+      console.log('Error', error.message);
+    }
+  };
+  const updateHandler = async (id) => {
+    try {
+      const body = { todo: inputContent.current.value, isCompleted: isChecked };
+      const res = await updateTodo(body, id);
+      refetchFunc();
+    } catch (error) {
+      console.log('Error', error.message);
+    } finally {
+      setIsSelectedEditButton((pre) => !pre);
+    }
   };
 
   useEffect(() => {
@@ -36,15 +48,18 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
         defaultChecked={isChecked}
         disabled={!isSelectedEditButton}
       />
-      <S.TodoContentBoxWrapper ref={inputContent} />
+      <S.TodoContentBoxWrapper
+        ref={inputContent}
+        disabled={!isSelectedEditButton}
+      />
       {!isSelectedEditButton ? (
         <S.TodoSelectButtonContainer>
           <TodoSelectButton title='수정' onClick={changeEditHandler} />
-          <TodoSelectButton title='삭제' />
+          <TodoSelectButton title='삭제' onClick={() => deleteHandler(id)} />
         </S.TodoSelectButtonContainer>
       ) : (
         <S.TodoSelectButtonContainer>
-          <TodoSelectButton title='제출' onClick={updateHandler} />
+          <TodoSelectButton title='제출' onClick={() => updateHandler(id)} />
           <TodoSelectButton title='취소' onClick={changeEditHandler} />
         </S.TodoSelectButtonContainer>
       )}
