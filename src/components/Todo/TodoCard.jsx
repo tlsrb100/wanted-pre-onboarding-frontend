@@ -3,7 +3,7 @@ import TodoSelectButton from './TodoSelectButton';
 import { useRef, useState, useEffect } from 'react';
 import { updateTodo, deleteTodo } from '../../apis/todo';
 
-const TodoCard = ({ id, content, isCompleted }) => {
+const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
   const [isSelectedEditButton, setIsSelectedEditButton] = useState(false);
   const [isChecked, setIsChecked] = useState(isCompleted);
   const inputContent = useRef('');
@@ -20,7 +20,7 @@ const TodoCard = ({ id, content, isCompleted }) => {
     const body = { todo: inputContent.current.value, isCompleted: isChecked };
     const res = await updateTodo(body, id);
     setIsSelectedEditButton((pre) => !pre);
-    console.log('업데이트 응답은', res);
+    refetchFunc();
   };
 
   useEffect(() => {
@@ -34,6 +34,7 @@ const TodoCard = ({ id, content, isCompleted }) => {
         onClick={toggleCheckHandler}
         value={true}
         defaultChecked={isChecked}
+        disabled={!isSelectedEditButton}
       />
       <S.TodoContentBoxWrapper ref={inputContent} />
       {!isSelectedEditButton ? (

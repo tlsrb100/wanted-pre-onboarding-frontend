@@ -17,7 +17,7 @@ const TodoForm = () => {
 
   return (
     <>
-      <TodoCardList todoList={todoList} />
+      <TodoCardList todoList={todoList} refetchFunc={asyncGetTodos} />
       <InputTodo onClick={asyncGetTodos} />
     </>
   );

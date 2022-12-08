@@ -1,7 +1,7 @@
 import * as S from './Todo.style';
 import TodoCard from './TodoCard';
 
-const TodoCardList = ({ todoList }) => {
+const TodoCardList = ({ todoList, refetchFunc }) => {
   console.log('props로 받은 todoList', todoList);
   return (
     <>
@@ -12,6 +12,7 @@ const TodoCardList = ({ todoList }) => {
             id={todo.id}
             content={todo.todo}
             isCompleted={todo.isCompleted}
+            refetchFunc={refetchFunc}
           />
         );
       })}
