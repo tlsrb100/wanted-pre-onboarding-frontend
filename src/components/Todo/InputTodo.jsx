@@ -9,12 +9,13 @@ const InputTodo = ({ onClick }) => {
   const createHandler = async () => {
     const content = typedInput.current.value;
     const res = await createTodo({ todo: content });
+    typedInput.current.value = '';
     onClick();
   };
 
   return (
     <S.InputTodoContainer>
-      <input class='todo-input-content' ref={typedInput} />
+      <input className='todo-input-content' ref={typedInput} />
       <TodoSelectButton title='등록' onClick={createHandler} />
     </S.InputTodoContainer>
   );

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import TodoSelectButton from './TodoSelectButton';
 
 const TodoFormContainer = styled.div`
   display: flex;
@@ -7,28 +6,37 @@ const TodoFormContainer = styled.div`
 `;
 
 const TodoCardListContainer = styled.ul`
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   height: 500px;
+
   overflow-y: auto;
+  background-color: ${({ theme }) => theme.COLOR.CARD_BACKGROUND};
 `;
 
 const TodoCardContainer = styled.div`
+  background-color: ${({ theme }) => theme.COLOR.BACKGROUND};
   padding: 10px;
   /* width: 500px; */
   display: flex;
   gap: 10px;
-  border: 2px solid red;
+  border-radius: 45px;
   & input {
     width: 35px;
     height: 50px;
+    background-color: ${({ isChecked }) => (isChecked ? 'red' : null)};
   }
 `;
 
 const TodoContentBoxWrapper = styled.textarea`
   height: 50px;
   flex-grow: 1;
+  font-size: 13px;
+  text-decoration: ${({ isChecked }) => (isChecked ? 'line-through' : '')};
+  color: ${({ isChecked }) => (isChecked ? 'red' : '')};
+  font-size: ${({ isChecked }) => (isChecked ? '13px' : '17px')};
 `;
 
 const TodoSelectButtonContainer = styled.div`

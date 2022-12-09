@@ -2,14 +2,26 @@ import * as S from './Todo.style';
 import TodoSelectButton from './TodoSelectButton';
 import { useRef, useState, useEffect } from 'react';
 import { updateTodo, deleteTodo } from '../../apis/todo';
+import { COLOR } from '../../styles/color';
 
 const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
   const [isSelectedEditButton, setIsSelectedEditButton] = useState(false);
   const [isChecked, setIsChecked] = useState(isCompleted);
   const inputContent = useRef('');
 
-  const toggleCheckHandler = () => {
-    setIsChecked((pre) => !pre);
+  const toggleCheckHandler = async (id) => {
+    try {
+      const body = {
+        todo: inputContent.current.value,
+        isCompleted: !isChecked,
+      };
+      const res = await updateTodo(body, id);
+      console.log(res);
+      setIsChecked((pre) => !pre);
+      refetchFunc();
+    } catch (error) {
+      console.log('Error', error.message);
+    }
   };
 
   const changeEditHandler = () => {
@@ -42,16 +54,17 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
   }, [content]);
 
   return (
-    <S.TodoCardContainer>
+    <S.TodoCardContainer isChecked={isChecked}>
       <input
         type='checkbox'
-        onClick={toggleCheckHandler}
+        onClick={() => toggleCheckHandler(id)}
         value={true}
         defaultChecked={isChecked}
-        disabled={!isSelectedEditButton}
+        // disabled={!isSelectedEditButton}
       />
       <S.TodoContentBoxWrapper
         ref={inputContent}
+        isChecked={isChecked}
         disabled={!isSelectedEditButton}
       />
       {!isSelectedEditButton ? (
@@ -61,7 +74,7 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
         </S.TodoSelectButtonContainer>
       ) : (
         <S.TodoSelectButtonContainer>
-          <TodoSelectButton title='제출' onClick={() => updateHandler(id)} />
+          <TodoSelectButton title='확인' onClick={() => updateHandler(id)} />
           <TodoSelectButton title='취소' onClick={changeEditHandler} />
         </S.TodoSelectButtonContainer>
       )}
