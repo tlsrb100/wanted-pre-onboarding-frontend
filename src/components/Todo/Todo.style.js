@@ -19,24 +19,31 @@ const TodoCardListContainer = styled.ul`
 const TodoCardContainer = styled.div`
   background-color: ${({ theme }) => theme.COLOR.BACKGROUND};
   padding: 10px;
-  /* width: 500px; */
   display: flex;
   gap: 10px;
-  border-radius: 45px;
-  & input {
-    width: 35px;
-    height: 50px;
-    background-color: ${({ isChecked }) => (isChecked ? 'red' : null)};
+  border-radius: 30px;
+
+  & .checkbox-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & input {
+      width: 35px;
+      height: 20px;
+      background-color: ${({ isChecked }) => (isChecked ? 'red' : null)};
+    }
   }
 `;
 
-const TodoContentBoxWrapper = styled.textarea`
-  height: 50px;
+const TodoContentBoxWrapper = styled.input`
+  /* height: 40px; */
   flex-grow: 1;
-  font-size: 13px;
+  font-size: 16px;
+  border: none;
+
   text-decoration: ${({ isChecked }) => (isChecked ? 'line-through' : '')};
-  color: ${({ isChecked }) => (isChecked ? 'red' : '')};
-  font-size: ${({ isChecked }) => (isChecked ? '13px' : '17px')};
+  color: ${({ isChecked, theme }) =>
+    isChecked ? theme.COLOR.COMPLETED_TODO_FONT : ''};
 `;
 
 const TodoSelectButtonContainer = styled.div`
@@ -50,15 +57,19 @@ const InputTodoContainer = styled.div`
   gap: 10px;
   & .todo-input-content {
     width: 420px;
-    height: 50px;
+    height: 35px;
+  }
+  & .add-icon-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
 const TodoSelectButtonWrapper = styled.button`
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  border: 1px solid black;
+  width: ${({ width }) => (width ? `${width}` : null)};
+  height: ${({ height }) => (height ? `${height}` : null)};
+  border-radius: ${({ radius }) => (radius ? `${radius}` : null)};
 `;
 export {
   TodoFormContainer,

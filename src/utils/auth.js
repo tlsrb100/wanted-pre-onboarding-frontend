@@ -7,7 +7,6 @@ const checkValidationEmail = (email) => {
 
 const checkValidationPassword = (password) => {
   const isValid = password?.length >= 8;
-  console.log('passwordisValid', isValid);
   return isValid;
 };
 

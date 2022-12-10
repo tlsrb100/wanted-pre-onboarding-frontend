@@ -1,10 +1,10 @@
 import InputForm from '../../components/Auth/InputForm';
-import * as S from '../../components/@commons/PageTemplate/PageTemplate.style';
+import PageTemplate from '../../components/@commons/PageTemplate/PageTemplate';
 const Auth = () => {
   return (
-    <S.PageTemplateWrapper>
+    <PageTemplate title={'Login'}>
       <InputForm />
-    </S.PageTemplateWrapper>
+    </PageTemplate>
   );
 };
 

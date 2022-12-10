@@ -5,9 +5,9 @@ import TodoCardList from './TodoCardList';
 import * as S from './Todo.style';
 const TodoForm = () => {
   const [todoList, setTodoList] = useState([]);
+
   const asyncGetTodos = async () => {
     const res = await getTodos();
-    console.log('투두리스트 요청응답은', res);
     setTodoList(res.data);
   };
 

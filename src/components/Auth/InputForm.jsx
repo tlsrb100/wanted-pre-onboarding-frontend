@@ -15,7 +15,6 @@ const InputForm = () => {
   const [selectedButton, setSelectedButton] = useState('로그인');
   const navigate = useNavigate();
   const buttonList = ['로그인', '회원가입'];
-  console.log(selectedButton);
 
   const buttonClickHandler = (e) => {
     setSelectedButton(e.target.value);
@@ -34,48 +33,47 @@ const InputForm = () => {
   };
 
   const submitLoginInfoHandler = async (body) => {
-    console.log('body는', body);
     if (selectedButton === '로그인') {
       const res = await signIn(body);
       const accessToken = res.data.access_token;
       localStorage.setItem('accessToken', accessToken);
       navigate('/todo');
-      console.log('로그인응답은', res);
     } else if (selectedButton === '회원가입') {
       const res = await signUp(body);
       const accessToken = res.data.access_token;
       localStorage.setItem('accessToken', accessToken);
-      console.log('회원가입응답은', res);
     }
   };
 
   return (
-    <>
+    <S.AuthContainer>
       <S.InputFormWrapper>
         <InputBox title='email' onChange={emailCheckHandler} />
         <InputBox title='pw' onChange={passwordCheckHandler} />
       </S.InputFormWrapper>
 
-      {buttonList.map((buttonTitle, idx) => {
-        return (
-          <SelectButton
-            key={idx}
-            isSelected={selectedButton === buttonTitle ? true : false}
-            onClick={buttonClickHandler}
-            title={buttonTitle}
-            disabled={false}
-          />
-        );
-      })}
+      <S.SelectButtonListContainer>
+        {buttonList.map((buttonTitle, idx) => {
+          return (
+            <SelectButton
+              key={idx}
+              isSelected={selectedButton === buttonTitle ? true : false}
+              onClick={buttonClickHandler}
+              title={buttonTitle}
+              disabled={false}
+            />
+          );
+        })}
+      </S.SelectButtonListContainer>
 
       <SubmitButton
         onClick={() => submitLoginInfoHandler(userLoginInfo)}
-        title='제출'
+        title='확인'
         disabled={
           !(validations.emailValidation && validations.passwordValidation)
         }
       />
-    </>
+    </S.AuthContainer>
   );
 };
 
