@@ -7,11 +7,13 @@ const PageTemplateWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: ${({ theme }) => theme.COLOR.BACKGROUND};
 `;
 
 const PageHeaderWrapper = styled.header`
   font-size: 30px;
   font-weight: 600;
+  margin-bottom: 20px;
 `;
 
 const PageHeaderTitle = styled.div``;

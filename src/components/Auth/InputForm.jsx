@@ -33,23 +33,31 @@ const InputForm = () => {
   };
 
   const submitLoginInfoHandler = async (body) => {
-    if (selectedButton === '로그인') {
-      const res = await signIn(body);
-      const accessToken = res.data.access_token;
-      localStorage.setItem('accessToken', accessToken);
-      navigate('/todo');
-    } else if (selectedButton === '회원가입') {
-      const res = await signUp(body);
-      const accessToken = res.data.access_token;
-      localStorage.setItem('accessToken', accessToken);
+    try {
+      if (selectedButton === '로그인') {
+        const res = await signIn(body);
+        console.log(res);
+        const accessToken = res.data.access_token;
+        localStorage.setItem('accessToken', accessToken);
+        alert(`로그인되었습니다`);
+        navigate('/todo');
+      } else if (selectedButton === '회원가입') {
+        const res = await signUp(body);
+        const accessToken = res.data.access_token;
+        alert(`회원가입되었습니다`);
+        localStorage.setItem('accessToken', accessToken);
+      }
+    } catch (error) {
+      console.log('인증 에러 : ', error);
+      alert(`인증 에러 : ${error.response.data.message}`);
     }
   };
 
   return (
     <S.AuthContainer>
       <S.InputFormWrapper>
-        <InputBox title='email' onChange={emailCheckHandler} />
-        <InputBox title='pw' onChange={passwordCheckHandler} />
+        <InputBox title='Email' onChange={emailCheckHandler} />
+        <InputBox title='Pw' onChange={passwordCheckHandler} />
       </S.InputFormWrapper>
 
       <S.SelectButtonListContainer>

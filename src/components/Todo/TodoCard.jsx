@@ -26,8 +26,8 @@ const TodoCard = ({ id, content, isCompleted, fetchAndSetTodo }) => {
       await deleteTodo(id);
       fetchAndSetTodo();
     } catch (error) {
-      console.log('Error', error.message);
-      alert(`Todo 삭제 에러 :  ${error.message}`);
+      console.log('Error', error.response.data.message);
+      alert(`Todo 삭제 에러 :  ${error.response.data.message}`);
     }
   };
 
@@ -39,8 +39,8 @@ const TodoCard = ({ id, content, isCompleted, fetchAndSetTodo }) => {
       fetchAndSetTodo();
       setIsSelectedEditButton((pre) => !pre);
     } catch (error) {
-      console.log('Error', error.message);
-      alert(`Todo 갱신 에러 : ${error.message}`);
+      console.log('Error', error.response.data.message);
+      alert(`Todo 갱신 에러 : ${error.response.data.message}`);
     } finally {
     }
   };
@@ -64,48 +64,50 @@ const TodoCard = ({ id, content, isCompleted, fetchAndSetTodo }) => {
         disabled={!isSelectedEditButton}
         maxLength='28'
       />
-      {!isSelectedEditButton ? (
-        <S.TodoSelectButtonContainer>
-          <TodoSelectButton
-            onClick={changeEditHandler}
-            width='20px'
-            height='30px'
-            radius='10px'
-          >
-            <FontAwesomeIcon icon={faPenClip} />
-          </TodoSelectButton>
-          <TodoSelectButton
-            title='삭제'
-            onClick={() => deleteHandler(id)}
-            width='20px'
-            height='30px'
-            radius='10px'
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </TodoSelectButton>
-        </S.TodoSelectButtonContainer>
-      ) : (
-        <S.TodoSelectButtonContainer>
-          <TodoSelectButton
-            title='확인'
-            onClick={() => updateHandler(id)}
-            width='20px'
-            height='30px'
-            radius='10px'
-          >
-            <FontAwesomeIcon icon={faCheck} />
-          </TodoSelectButton>
-          <TodoSelectButton
-            title='취소'
-            onClick={changeEditHandler}
-            width='20px'
-            height='30px'
-            radius='10px'
-          >
-            <FontAwesomeIcon icon={faXmark} />
-          </TodoSelectButton>
-        </S.TodoSelectButtonContainer>
-      )}
+      <S.TodoSelectButtonContainer>
+        {!isSelectedEditButton ? (
+          <>
+            <TodoSelectButton
+              onClick={changeEditHandler}
+              width='20px'
+              height='30px'
+              radius='10px'
+            >
+              <FontAwesomeIcon icon={faPenClip} />
+            </TodoSelectButton>
+            <TodoSelectButton
+              title='삭제'
+              onClick={() => deleteHandler(id)}
+              width='20px'
+              height='30px'
+              radius='10px'
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </TodoSelectButton>
+          </>
+        ) : (
+          <>
+            <TodoSelectButton
+              title='확인'
+              onClick={() => updateHandler(id)}
+              width='20px'
+              height='30px'
+              radius='10px'
+            >
+              <FontAwesomeIcon icon={faCheck} />
+            </TodoSelectButton>
+            <TodoSelectButton
+              title='취소'
+              onClick={changeEditHandler}
+              width='20px'
+              height='30px'
+              radius='10px'
+            >
+              <FontAwesomeIcon icon={faXmark} />
+            </TodoSelectButton>
+          </>
+        )}
+      </S.TodoSelectButtonContainer>
     </S.TodoCardContainer>
   );
 };
