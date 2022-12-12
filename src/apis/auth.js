@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { BASE_URL } from '../constants/url';
 
 const apiClient = axios.create({
-  baseURL: 'https://pre-onboarding-selection-task.shop',
+  baseURL: BASE_URL,
 });
 
 const signUp = async (body) => {

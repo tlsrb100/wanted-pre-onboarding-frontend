@@ -3,13 +3,9 @@ import { getTodos } from '../../apis/todo';
 import InputTodo from './InputTodo';
 import TodoCardList from './TodoCardList';
 import * as S from './Todo.style';
+import useGetTodoList from '../../hooks/Todo/useGetTodoList';
 const TodoForm = () => {
-  const [todoList, setTodoList] = useState([]);
-
-  const asyncGetTodos = async () => {
-    const res = await getTodos();
-    setTodoList(res.data);
-  };
+  const { todoList, asyncGetTodos } = useGetTodoList([]);
 
   useEffect(() => {
     asyncGetTodos();

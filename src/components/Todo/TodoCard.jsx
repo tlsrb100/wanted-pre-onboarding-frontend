@@ -15,6 +15,7 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
   const [isChecked, setIsChecked] = useState(isCompleted);
   const inputContent = useRef('');
 
+  //체크박스 핸들러
   const toggleCheckHandler = async (id) => {
     try {
       const body = {
@@ -26,13 +27,16 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
       refetchFunc();
     } catch (error) {
       console.log('Error', error.message);
+      alert(`다시 시도해주세요. ${error.message}`);
     }
   };
 
+  //수정 모드 핸들러
   const changeEditHandler = () => {
     setIsSelectedEditButton((pre) => !pre);
   };
 
+  //삭제 모드 핸들러
   const deleteHandler = async (id) => {
     try {
       const res = await deleteTodo(id);
@@ -42,6 +46,7 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
     }
   };
 
+  //수정 후 업데이트 핸들러
   const updateHandler = async (id) => {
     try {
       const body = { todo: inputContent.current.value, isCompleted: isChecked };
@@ -63,10 +68,8 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
       <div className='checkbox-container'>
         <input
           type='checkbox'
-          onClick={() => toggleCheckHandler(id)}
-          value={true}
-          defaultChecked={isChecked}
-          // disabled={!isSelectedEditButton}
+          onChange={() => toggleCheckHandler(id)}
+          checked={isChecked}
         />
       </div>
       <S.TodoContentBoxWrapper

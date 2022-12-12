@@ -5,7 +5,6 @@ const TodoSelectButton = ({
   children,
   title,
   onClick = null,
-  isSelected,
   width,
   height,
   radius,
