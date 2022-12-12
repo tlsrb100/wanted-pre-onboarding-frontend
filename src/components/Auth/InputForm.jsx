@@ -55,7 +55,7 @@ const InputForm = () => {
     <S.AuthContainer>
       <S.InputFormWrapper>
         <InputBox title='Email' onChange={emailCheckHandler} />
-        <InputBox title='Pw' onChange={passwordCheckHandler} />
+        <InputBox title='Pw' onChange={passwordCheckHandler} type='password' />
       </S.InputFormWrapper>
 
       <S.SelectButtonListContainer>
