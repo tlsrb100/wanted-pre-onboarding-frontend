@@ -26,7 +26,6 @@ const TodoCard = ({ id, content, isCompleted, fetchAndSetTodo }) => {
       await deleteTodo(id);
       fetchAndSetTodo();
     } catch (error) {
-      console.log('Error', error.response.data.message);
       alert(`Todo 삭제 에러 :  ${error.response.data.message}`);
     }
   };
@@ -35,11 +34,10 @@ const TodoCard = ({ id, content, isCompleted, fetchAndSetTodo }) => {
   const updateHandler = async (id) => {
     try {
       const body = { todo: inputRef.current.value, isCompleted: isChecked };
-      const res = await updateTodo(body, id);
+      await updateTodo(body, id);
       fetchAndSetTodo();
       setIsSelectedEditButton((pre) => !pre);
     } catch (error) {
-      console.log('Error', error.response.data.message);
       alert(`Todo 갱신 에러 : ${error.response.data.message}`);
     } finally {
     }

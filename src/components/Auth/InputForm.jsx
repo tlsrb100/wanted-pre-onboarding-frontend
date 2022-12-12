@@ -36,7 +36,6 @@ const InputForm = () => {
     try {
       if (selectedButton === '로그인') {
         const res = await signIn(body);
-        console.log(res);
         const accessToken = res.data.access_token;
         localStorage.setItem('accessToken', accessToken);
         alert(`로그인되었습니다`);
@@ -48,7 +47,6 @@ const InputForm = () => {
         localStorage.setItem('accessToken', accessToken);
       }
     } catch (error) {
-      console.log('인증 에러 : ', error);
       alert(`인증 에러 : ${error.response.data.message}`);
     }
   };

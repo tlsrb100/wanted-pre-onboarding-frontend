@@ -15,8 +15,7 @@ const useCheckBox = (initialValue = null) => {
       setIsChecked((pre) => !pre);
       fetchAndSetTodo();
     } catch (error) {
-      console.log('Error', error.message);
-      alert(`체크박스 에러 :  ${error.message}`);
+      alert(`체크박스 에러 :  ${error.response.data.message}`);
     }
   };
 

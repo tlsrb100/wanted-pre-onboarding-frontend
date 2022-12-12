@@ -9,8 +9,7 @@ const useGetTodoList = (initialValue = []) => {
       const res = await getTodo();
       setTodoList(res.data);
     } catch (error) {
-      console.log('Error', error.message);
-      alert(`Todo fetch 에러 :  ${error.message}`);
+      alert(`Todo fetch 에러 :  ${error.response.data.message}`);
     }
   };
 

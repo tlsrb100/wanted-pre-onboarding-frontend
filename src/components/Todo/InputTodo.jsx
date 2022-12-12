@@ -13,7 +13,6 @@ const InputTodo = ({ onClick }) => {
       typedInput.current.value = '';
       onClick();
     } catch (error) {
-      console.log('Error', error.response.data.message);
       alert(`Todo 등록 에러 :  ${error.response.data.message}`);
     }
   };
