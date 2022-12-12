@@ -1,23 +1,26 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { updateTodo } from '../../apis/todo';
+import useGetTodoList from './useGetTodoList';
 const useCheckBox = (initialValue = null) => {
   const [isChecked, setIsChecked] = useState(initialValue);
-
+  const { fetchAndSetTodo } = useGetTodoList();
+  const inputRef = useRef('');
   const toggleCheckHandler = async (id) => {
     try {
       const body = {
-        todo: inputContent.current.value,
+        todo: inputRef.current.value,
         isCompleted: !isChecked,
       };
-      const res = await updateTodo(body, id);
+      await updateTodo(body, id);
       setIsChecked((pre) => !pre);
-      refetchFunc();
+      fetchAndSetTodo();
     } catch (error) {
       console.log('Error', error.message);
-      alert(`다시 시도해주세요. ${error.message}`);
+      alert(`체크박스 에러 :  ${error.message}`);
     }
   };
 
-  return { isChecked, setIsChecked };
+  return { isChecked, setIsChecked, inputRef, toggleCheckHandler };
 };
 
 export default useCheckBox;

@@ -7,10 +7,15 @@ const InputTodo = ({ onClick }) => {
   const typedInput = useRef('');
 
   const createHandler = async () => {
-    const content = typedInput.current.value;
-    const res = await createTodo({ todo: content });
-    typedInput.current.value = '';
-    onClick();
+    try {
+      const content = typedInput.current.value;
+      await createTodo({ todo: content });
+      typedInput.current.value = '';
+      onClick();
+    } catch (error) {
+      console.log('Error', error.message);
+      alert(`Todo 등록 에러 :  ${error.message}`);
+    }
   };
 
   return (
@@ -19,7 +24,6 @@ const InputTodo = ({ onClick }) => {
       <div className='add-icon-box' onClick={createHandler}>
         <FontAwesomeIcon icon={faCirclePlus} size='2x' />
       </div>
-      {/* <TodoSelectButton title='등록' onClick={createHandler} /> */}
     </S.InputTodoContainer>
   );
 };

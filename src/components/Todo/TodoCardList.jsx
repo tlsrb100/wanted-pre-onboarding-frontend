@@ -1,7 +1,7 @@
 import * as S from './Todo.style';
 import TodoCard from './TodoCard';
 
-const TodoCardList = ({ todoList, refetchFunc }) => {
+const TodoCardList = ({ todoList, fetchAndSetTodo }) => {
   return (
     <S.TodoCardListContainer>
       {todoList?.map((todo, idx) => {
@@ -11,7 +11,7 @@ const TodoCardList = ({ todoList, refetchFunc }) => {
               id={todo.id}
               content={todo.todo}
               isCompleted={todo.isCompleted}
-              refetchFunc={refetchFunc}
+              fetchAndSetTodo={fetchAndSetTodo}
             />
           </li>
         );

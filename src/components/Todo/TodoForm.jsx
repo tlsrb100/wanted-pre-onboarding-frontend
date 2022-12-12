@@ -1,20 +1,19 @@
-import { useEffect, useState } from 'react';
-import { getTodos } from '../../apis/todo';
 import InputTodo from './InputTodo';
 import TodoCardList from './TodoCardList';
 import * as S from './Todo.style';
 import useGetTodoList from '../../hooks/Todo/useGetTodoList';
+import { useEffect } from 'react';
 const TodoForm = () => {
-  const { todoList, asyncGetTodos } = useGetTodoList([]);
+  const { todoList, fetchAndSetTodo } = useGetTodoList([]);
 
   useEffect(() => {
-    asyncGetTodos();
+    fetchAndSetTodo();
   }, []);
 
   return (
     <S.TodoFormContainer>
-      <InputTodo onClick={asyncGetTodos} />
-      <TodoCardList todoList={todoList} refetchFunc={asyncGetTodos} />
+      <InputTodo onClick={fetchAndSetTodo} />
+      <TodoCardList todoList={todoList} fetchAndSetTodo={fetchAndSetTodo} />
     </S.TodoFormContainer>
   );
 };

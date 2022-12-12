@@ -5,7 +5,7 @@ const createTodo = async (body) => {
   return res;
 };
 
-const getTodos = async () => {
+const getTodo = async () => {
   const res = await apiClient.get('/todos');
   return res;
 };
@@ -20,4 +20,4 @@ const deleteTodo = async (id) => {
   return res;
 };
 
-export { createTodo, getTodos, updateTodo, deleteTodo };
+export { createTodo, getTodo, updateTodo, deleteTodo };

@@ -1,8 +1,9 @@
 import * as S from './Todo.style';
 import TodoSelectButton from './TodoSelectButton';
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { updateTodo, deleteTodo } from '../../apis/todo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useCheckBox from '../../hooks/Todo/useCheckBox';
 import {
   faXmark,
   faPenClip,
@@ -10,26 +11,9 @@ import {
   faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
-const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
+const TodoCard = ({ id, content, isCompleted, fetchAndSetTodo }) => {
   const [isSelectedEditButton, setIsSelectedEditButton] = useState(false);
-  const [isChecked, setIsChecked] = useState(isCompleted);
-  const inputContent = useRef('');
-
-  //체크박스 핸들러
-  const toggleCheckHandler = async (id) => {
-    try {
-      const body = {
-        todo: inputContent.current.value,
-        isCompleted: !isChecked,
-      };
-      const res = await updateTodo(body, id);
-      setIsChecked((pre) => !pre);
-      refetchFunc();
-    } catch (error) {
-      console.log('Error', error.message);
-      alert(`다시 시도해주세요. ${error.message}`);
-    }
-  };
+  const { isChecked, inputRef, toggleCheckHandler } = useCheckBox(isCompleted);
 
   //수정 모드 핸들러
   const changeEditHandler = () => {
@@ -39,28 +23,30 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
   //삭제 모드 핸들러
   const deleteHandler = async (id) => {
     try {
-      const res = await deleteTodo(id);
-      refetchFunc();
+      await deleteTodo(id);
+      fetchAndSetTodo();
     } catch (error) {
       console.log('Error', error.message);
+      alert(`Todo 삭제 에러 :  ${error.message}`);
     }
   };
 
   //수정 후 업데이트 핸들러
   const updateHandler = async (id) => {
     try {
-      const body = { todo: inputContent.current.value, isCompleted: isChecked };
+      const body = { todo: inputRef.current.value, isCompleted: isChecked };
       const res = await updateTodo(body, id);
-      refetchFunc();
+      fetchAndSetTodo();
+      setIsSelectedEditButton((pre) => !pre);
     } catch (error) {
       console.log('Error', error.message);
+      alert(`Todo 갱신 에러 : ${error.message}`);
     } finally {
-      setIsSelectedEditButton((pre) => !pre);
     }
   };
 
   useEffect(() => {
-    inputContent.current.value = content;
+    inputRef.current.value = content;
   }, [content]);
 
   return (
@@ -73,7 +59,7 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
         />
       </div>
       <S.TodoContentBoxWrapper
-        ref={inputContent}
+        ref={inputRef}
         isChecked={isChecked}
         disabled={!isSelectedEditButton}
         maxLength='28'
@@ -95,7 +81,6 @@ const TodoCard = ({ id, content, isCompleted, refetchFunc }) => {
             height='30px'
             radius='10px'
           >
-            {' '}
             <FontAwesomeIcon icon={faTrash} />
           </TodoSelectButton>
         </S.TodoSelectButtonContainer>

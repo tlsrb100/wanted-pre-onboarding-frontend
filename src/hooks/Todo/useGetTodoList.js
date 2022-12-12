@@ -1,15 +1,20 @@
-import { useState } from 'react';
-import { getTodos } from '../../apis/todo';
+import { useState, useEffect } from 'react';
+import { getTodo } from '../../apis/todo';
 
 const useGetTodoList = (initialValue = []) => {
   const [todoList, setTodoList] = useState(initialValue);
 
-  const asyncGetTodos = async () => {
-    const res = await getTodos();
-    setTodoList(res.data);
+  const fetchAndSetTodo = async () => {
+    try {
+      const res = await getTodo();
+      setTodoList(res.data);
+    } catch (error) {
+      console.log('Error', error.message);
+      alert(`Todo fetch 에러 :  ${error.message}`);
+    }
   };
 
-  return { todoList, asyncGetTodos };
+  return { todoList, fetchAndSetTodo };
 };
 
 export default useGetTodoList;
