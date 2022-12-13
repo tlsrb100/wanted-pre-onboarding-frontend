@@ -1,11 +1,15 @@
 # 프로젝트의 실행 방법
-* 배포 링크로 실행  
+* 배포 링크로 실행할 수 있습니다.  
 https://wanted-pre-onboarding-frontend-9k8a95ow2-tlsrb100.vercel.app/  
-* 로컬에서 실행
+* 로컬에서 실행할 수 있습니다.
 ```
 npm install
 npm run start
 ```  
+* test 계정 
+   * ID : test9748@gmail.com  
+   * PW : 12345678  
+   
 # 요구 기능
 ### 1. 로그인 / 회원가입
 * / 경로에 로그인 / 회원가입 기능을 개발해주세요  
