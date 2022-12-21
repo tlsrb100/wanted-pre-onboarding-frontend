@@ -9,7 +9,138 @@ npm run start
 * test 계정 
    * ID : test9748@gmail.com  
    * PW : 12345678  
-   
+
+# 폴더 구조
+  * apis : Auth, Todo에서 사용되는 api
+  * components : 각 페이지에 사용되는 컴포넌트 및 공통으로 사용되는 컴포넌트 관리
+  * constants : url, 라우팅 path 상수 관리
+  * hooks : 커스텀 훅 관리
+  * pages : Auth, Todo 페이지 관리
+  * styles : 공통 css 속성 관리
+  * util : api 제외한 함수 
+```
+📦src
+ ┣ 📂apis
+ ┃ ┣ 📜auth.js
+ ┃ ┗ 📜todo.js
+ ┣ 📂components
+ ┃ ┣ 📂@commons
+ ┃ ┃ ┗ 📂PageTemplate
+ ┃ ┃ ┃ ┣ 📜PageTemplate.jsx
+ ┃ ┃ ┃ ┗ 📜PageTemplate.style.js
+ ┃ ┣ 📂@helper
+ ┃ ┃ ┗ 📂router
+ ┃ ┃ ┃ ┣ 📜PrivateRouter.jsx
+ ┃ ┃ ┃ ┗ 📜PublicRouter.jsx
+ ┃ ┣ 📂Auth
+ ┃ ┃ ┣ 📜Auth.style.js
+ ┃ ┃ ┣ 📜InputBox.jsx
+ ┃ ┃ ┣ 📜InputForm.jsx
+ ┃ ┃ ┣ 📜SelectButton.jsx
+ ┃ ┃ ┗ 📜SubmitButton.jsx
+ ┃ ┗ 📂Todo
+ ┃ ┃ ┣ 📜InputTodo.jsx
+ ┃ ┃ ┣ 📜Todo.style.js
+ ┃ ┃ ┣ 📜TodoCard.jsx
+ ┃ ┃ ┣ 📜TodoCardList.jsx
+ ┃ ┃ ┣ 📜TodoForm.jsx
+ ┃ ┃ ┗ 📜TodoSelectButton.jsx
+ ┣ 📂constants
+ ┃ ┣ 📜routes.js
+ ┃ ┗ 📜url.js
+ ┣ 📂hooks
+ ┃ ┣ 📂Auth
+ ┃ ┗ 📂Todo
+ ┃ ┃ ┣ 📜useCheckBox.js
+ ┃ ┃ ┗ 📜useGetTodoList.js
+ ┣ 📂pages
+ ┃ ┣ 📂Auth
+ ┃ ┃ ┗ 📜index.jsx
+ ┃ ┣ 📂Todo
+ ┃ ┃ ┗ 📜index.jsx
+ ┃ ┗ 📜index.jsx
+ ┣ 📂styles
+ ┃ ┣ 📜GlobalStyles.js
+ ┃ ┣ 📜color.js
+ ┃ ┗ 📜theme.js
+ ┣ 📂utils
+ ┃ ┗ 📜auth.js
+ ┣ 📜App.js
+ ┗ 📜index.js
+```
+
+
+# 구현방식
+### 페이지 라우팅
+```javascript
+function App() {
+  const pages = useRoutes(Pages);
+  setHeaderToken();
+  return pages;
+}
+```
+```javascript
+const Pages = [
+  {
+    element: <PrivateRouter />,
+    children: [
+      {
+        path: ROUTES.TODO.PATH,
+        element: <Todo />,
+      },
+    ],
+  },
+  {
+    element: <PublicRouter />,
+    children: [
+      {
+        path: ROUTES.AUTH.PATH,
+        element: <Auth />,
+      },
+    ],
+  },
+];
+```
+```javascript
+const PrivateRouter = () => {
+  const accessToken = localStorage.getItem('accessToken');
+  return accessToken ? <Outlet /> : <Navigate to='/' />;
+};
+```
+  * 페이지 라우팅 구조를 파악하기 쉽게 useRoutes를 사용했고 라우팅을 배열로 만들어 따로 한곳에서 관리할수있도록 하였습니다.
+  * PrivateRouter와 PubliceRouter로 중첩시켜 의도한 조건에 따라 각각의 페이지가 라우팅되도록 만들었습니다.
+
+
+### 로그인/회원가입
+1. 로그인과 회원가입을 각각의 페이지로 구분하지 않고 버튼상태에 따라 해당되는 api를 요청하게 했지만, 사용자 경험적인 측면에서는 페이지를 나누어 명확하게 상태를 보여주는것이 좋을것같습니다.
+<img width="379" alt="image" src="https://user-images.githubusercontent.com/104765779/208827855-56463651-290f-4a48-b9c8-d6283f19e8e8.png">
+
+1. 헤더 설정  
+
+```javascript
+function App() {
+  const pages = useRoutes(Pages);
+  setHeaderToken();
+  return pages;
+}
+```
+```javascript
+const setHeaderToken = () => {
+  const accessToken = localStorage.getItem('accessToken');
+  if (accessToken) {
+    apiClient.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${accessToken}`;
+  } else {
+    delete apiClient.defaults.headers.common['Authorization'];
+  }
+};
+```
+  * 페이지 라우팅이 될때마다 App 컴포넌트에서 토큰여부에 따라 Header 설정을 하려고 했지만, 다시 생각해보니 todo 페이지에서 의도적으로 토큰을 지우더라도 라우팅을 하지않는다면 헤더에 토큰이 계속 저장되어있기 때문에 좋은방법이 아니라고 생각합니다.
+
+
+
+
 # 요구 기능
 ### 1. 로그인 / 회원가입
 * / 경로에 로그인 / 회원가입 기능을 개발해주세요  
