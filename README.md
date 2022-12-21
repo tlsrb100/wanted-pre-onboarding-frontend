@@ -117,6 +117,28 @@ const PrivateRouter = () => {
   * PrivateRouter와 PubliceRouter로 중첩시켜 토큰여부에 따라 페이지 라우팅이 일어나게 하였습니다. ex) 비로그인시에 url에 /todo를 입력하면 '/' 로그인페이지로 이동하게 됩니다.
 
 
+### 페이지 템플릿
+  * Auth, Todo 페이지에서 공통으로 가지는 부분들은 PageTemplate 컴포넌트를 만들어서 관리했습니다. 현재는 타이틀만 공통으로 적용되어있습니다.
+  ```javascript
+  const PageTemplate = ({ children, title }) => {
+  return (
+    <S.PageTemplateWrapper>
+      <S.PageHeaderWrapper>{title}</S.PageHeaderWrapper>
+      {children}
+    </S.PageTemplateWrapper>
+  };
+
+  const Auth = () => {
+    return (
+      <PageTemplate title={'Todo List'}>
+        <InputForm />
+      </PageTemplate>
+    );
+  };
+  ```
+
+
+
 ### Auth Page
 1. 로그인 / 회원가입
 <img width="379" alt="image" src="https://user-images.githubusercontent.com/104765779/208827855-56463651-290f-4a48-b9c8-d6283f19e8e8.png">
