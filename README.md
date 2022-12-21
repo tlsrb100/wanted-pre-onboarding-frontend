@@ -11,13 +11,6 @@ npm run start
    * PW : 12345678  
 
 # 폴더 구조
-  * apis : Auth, Todo에서 사용되는 api
-  * components : 각 페이지에 사용되는 컴포넌트 및 공통으로 사용되는 컴포넌트 관리
-  * constants : url, 라우팅 path 상수 관리
-  * hooks : 커스텀 훅 관리
-  * pages : Auth, Todo 페이지 관리
-  * styles : 공통 css 속성 관리
-  * util : api 제외한 함수 
 ```
 📦src
  ┣ 📂apis
@@ -71,6 +64,21 @@ npm run start
 
 
 # 구현방식
+### 폴더 관리
+```
+apis : Auth, Todo에서 사용되는 api
+components : 각 페이지에 사용되는 컴포넌트 및 공통으로 사용되는 컴포넌트 관리
+constants : url, 라우팅 path 상수 관리
+hooks : 커스텀 훅 관리
+pages : Auth, Todo 페이지 관리
+styles : 공통 css 속성 관리
+util : api 제외한 함수 
+```
+  * 사용 목적에 맞는 파일들을 따로 관리하고 찾기쉽게 최대한 구분지어 폴더를 만들었습니다.
+  * css파일은 styles 폴더에 넣지 않고 관리하기 쉽게 직접적으로 사용하는 컴포넌트와 같은 폴더에 위치시켰습니다.
+  * constants폴더에 상수들을 넣어놨지만 url 경우는 env 파일로 관리하는것이 보안상 더 좋을거라 생각합니다.
+  
+  
 ### 페이지 라우팅
 ```javascript
 function App() {
@@ -78,8 +86,7 @@ function App() {
   setHeaderToken();
   return pages;
 }
-```
-```javascript
+
 const Pages = [
   {
     element: <PrivateRouter />,
@@ -100,22 +107,44 @@ const Pages = [
     ],
   },
 ];
-```
-```javascript
+
 const PrivateRouter = () => {
   const accessToken = localStorage.getItem('accessToken');
   return accessToken ? <Outlet /> : <Navigate to='/' />;
 };
 ```
-  * 페이지 라우팅 구조를 파악하기 쉽게 useRoutes를 사용했고 라우팅을 배열로 만들어 따로 한곳에서 관리할수있도록 하였습니다.
-  * PrivateRouter와 PubliceRouter로 중첩시켜 의도한 조건에 따라 각각의 페이지가 라우팅되도록 만들었습니다.
+  * 페이지 라우팅 구조를 파악하기 쉽게 useRoutes를 사용했고 라우팅을 배열로 만들어 한곳에서 따로 관리할수있도록 하였습니다.
+  * PrivateRouter와 PubliceRouter로 중첩시켜 토큰여부에 따라 페이지 라우팅이 일어나게 하였습니다. ex) 비로그인시에 url에 /todo를 입력하면 '/' 로그인페이지로 이동하게 됩니다.
 
 
-### 로그인/회원가입
-1. 로그인과 회원가입을 각각의 페이지로 구분하지 않고 버튼상태에 따라 해당되는 api를 요청하게 했지만, 사용자 경험적인 측면에서는 페이지를 나누어 명확하게 상태를 보여주는것이 좋을것같습니다.
+### Auth Page
+1. 로그인 / 회원가입
 <img width="379" alt="image" src="https://user-images.githubusercontent.com/104765779/208827855-56463651-290f-4a48-b9c8-d6283f19e8e8.png">
 
-1. 헤더 설정  
+```javascript
+  const submitLoginInfoHandler = async (body) => {
+    try {
+      if (selectedButton === '로그인') {
+        const res = await signIn(body);
+        const accessToken = res.data.access_token;
+        localStorage.setItem('accessToken', accessToken);
+        alert(`로그인되었습니다`);
+        navigate('/todo');
+      } else if (selectedButton === '회원가입') {
+        const res = await signUp(body);
+        const accessToken = res.data.access_token;
+        alert(`회원가입되었습니다`);
+        localStorage.setItem('accessToken', accessToken);
+      }
+    } catch (error) {
+      alert(`인증 에러 : ${error.response.data.message}`);
+    }
+  };
+```
+  * 로그인과 회원가입을 각각의 페이지로 구분하지 않고 버튼상태에 따라 해당되는 api를 요청하게 했지만, 사용자 경험적인 측면에서는 페이지를 나누어 명확하게 상태를 보여주는것이 좋을것같습니다.  
+  * email / PW는 최소한의 유효성기능만 적용이 되어있어서 추후 보완이 필요한 상태입니다.
+  
+2. 헤더 설정  
 
 ```javascript
 function App() {
@@ -123,8 +152,7 @@ function App() {
   setHeaderToken();
   return pages;
 }
-```
-```javascript
+
 const setHeaderToken = () => {
   const accessToken = localStorage.getItem('accessToken');
   if (accessToken) {
@@ -136,9 +164,82 @@ const setHeaderToken = () => {
   }
 };
 ```
-  * 페이지 라우팅이 될때마다 App 컴포넌트에서 토큰여부에 따라 Header 설정을 하려고 했지만, 다시 생각해보니 todo 페이지에서 의도적으로 토큰을 지우더라도 라우팅을 하지않는다면 헤더에 토큰이 계속 저장되어있기 때문에 좋은방법이 아니라고 생각합니다.
+  * 페이지 라우팅이 될때마다 App 컴포넌트에서 토큰여부에 따라 Header 설정을 하려고 했지만, 다시 생각해보니 todo 페이지에서 의도적으로 토큰을 지우더라도 라우팅을 하지않는다면 헤더에 토큰이 계속 저장되어있기 때문에 좋은방법은 아니라고 생각합니다.
 
 
+
+### Todo Page
+
+1. 구조   
+ ```javascript
+ const TodoForm = () => {
+  const { todoList, fetchAndSetTodo } = useGetTodoList([]);
+
+  useEffect(() => {
+    fetchAndSetTodo();
+  }, []);
+
+  return (
+    <S.TodoFormContainer>
+      <InputTodo onClick={fetchAndSetTodo} />
+      <TodoCardList todoList={todoList} fetchAndSetTodo={fetchAndSetTodo} />
+    </S.TodoFormContainer>
+  );
+};
+ ```
+     
+* props drilling을 하게 되어서 최상단인 TodoForm에서 todoList상태를 만들어 관리하였습니다.
+* useGetTodoList 커스텀훅은 todoList 상태, 필요한 함수를 다른곳에서도 사용하려고 만들었지만,
+  useState로 로컬상태만 가지다보니 다른곳에서 상태공유가 불가능해서 단순히 TodoForm 컴포넌트에서 보여지는 코드를 줄이는 역할만 하고 있습니다. 
+
+2. CRUD
+  * create, update, delete 요청은 정상응답을 받으면 상단 TodoForm에서 props로 받은 함수로 todoList를 fetch해오고 상태를 업데이트하도록 하였습니다.
+    ```javascript
+      const deleteHandler = async (id) => {
+      try {
+        await deleteTodo(id);
+        fetchAndSetTodo();
+      } catch (error) {
+        alert(`Todo 삭제 에러 :  ${error.response.data.message}`);
+      }
+    };
+    ```
+  * Todo Input값을 가져올때는 불필요한 재렌더링을 피하기 위해 useState 상태로 만들지 않고 useRef를 사용하였습니다.
+    ```javascript
+    const InputTodo = ({ onClick }) => {
+      const typedInput = useRef('');
+
+      return (
+        <S.InputTodoContainer>
+          <input className='todo-input-content' ref={typedInput} />
+          <div className='add-icon-box' onClick={createHandler}>
+            <FontAwesomeIcon icon={faCirclePlus} size='2x' />
+          </div>
+        </S.InputTodoContainer>
+      );
+    };
+    ```
+  * 에러 핸들링은 각각의 api 요청에 try ~ catch을 사용해서 모든 에러에 대해 메세지를 띄워주도록 하였습니다.
+    사용자에게 에러의 내용을 보여주기 위해서 에러 응답에 포함되어있는 메세지를 활용했습니다.
+    
+    ```javascript
+    const createHandler = async () => {
+      try {
+        const content = typedInput.current.value;
+        await createTodo({ todo: content });
+        typedInput.current.value = '';
+        onClick();
+      } catch (error) {
+        alert(`Todo 등록 에러 :  ${error.response.data.message}`);
+      }
+    };
+    ```
+    
+    <img width="448" alt="image" src="https://user-images.githubusercontent.com/104765779/208838392-88529d76-a04f-48f6-843f-65341adf161c.png">
+
+    
+
+  
 
 
 # 요구 기능
